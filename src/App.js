@@ -1,10 +1,9 @@
-import logo from './logo.svg';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      {/* test commit */}
+      <h1>This is my react app</h1>
     </div>
   );
 }
