@@ -15,3 +15,13 @@ code {
 i{
   cursor: pointer;
 }
+
+.add-note-form{
+  background-color: #e5efff;
+  padding: 22px 50px;
+  border-radius: 8px;
+}
+
+.add-note-form input, .add-note-form textarea{
+  background-color: #f6f9ff;
+}

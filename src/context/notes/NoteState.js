@@ -21,7 +21,7 @@ const NoteState = (props) => {
     //add note function
     const addNote = async (title, description, tag) => {
         //api call
-        const response = await fetch(`${host}/api/notes/addnote`, {
+        await fetch(`${host}/api/notes/addnote`, {
             method: 'post',
             headers: {
                 'content-type': 'application/json',
@@ -29,7 +29,6 @@ const NoteState = (props) => {
             },
             body: JSON.stringify({ title, description, tag })
         });
-        const json = response.json();
 
         let note = {
 
@@ -40,25 +39,31 @@ const NoteState = (props) => {
         setNotes(notes.concat(note));
     }
 
-    //delte note function
-    const deleteNote = (id) => {
-        const newNote = notes.filter((note) => { return note._id !== id });
-        setNotes(newNote);
+    //delete note function
+    const deleteNote = async (id) => {
+        //api call
+        await fetch(`${host}/api/notes/deletenote/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'content-type': 'application/json',
+                'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjI5ZDcwZmE2ODllM2Q5MjkwNGQ3ZjI0In0sImlhdCI6MTY1NDQ5OTU5OH0.6bKRNgML54AHqpnzt2JBmLSrStDqPyGkQh8FlqMAujE'
+            }
+        });
+
+        fetchAllNotes();
     }
 
     //edit note function
     const editNote = async (id, title, description, tag) => {
         //api call
-        const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
-            method: 'post',
+        await fetch(`${host}/api/notes/updatenote/${id}`, {
+            method: 'PUT',
             headers: {
                 'content-type': 'application/json',
                 'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjI5ZDcwZmE2ODllM2Q5MjkwNGQ3ZjI0In0sImlhdCI6MTY1NDQ5OTU5OH0.6bKRNgML54AHqpnzt2JBmLSrStDqPyGkQh8FlqMAujE'
             },
             body: JSON.stringify({ title, description, tag })
         });
-        const json = response.json();
-
 
         for (let i = 0; i < notes.length; i++) {
             if (notes[i]._id === id) {
