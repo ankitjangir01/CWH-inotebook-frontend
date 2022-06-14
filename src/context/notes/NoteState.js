@@ -21,7 +21,7 @@ const NoteState = (props) => {
     //add note function
     const addNote = async (title, description, tag) => {
         //api call
-        await fetch(`${host}/api/notes/addnote`, {
+        const res = await fetch(`${host}/api/notes/addnote`, {
             method: 'post',
             headers: {
                 'content-type': 'application/json',
@@ -29,34 +29,29 @@ const NoteState = (props) => {
             },
             body: JSON.stringify({ title, description, tag })
         });
-
-        let note = {
-
-            "title": title,
-            "description": description,
-            "tag": tag
-        }
-        setNotes(notes.concat(note));
+        let json = await res.json();
+        return json;
     }
 
     //delete note function
     const deleteNote = async (id) => {
         //api call
-        await fetch(`${host}/api/notes/deletenote/${id}`, {
+        const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
             method: 'DELETE',
             headers: {
                 'content-type': 'application/json',
                 'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjI5ZDcwZmE2ODllM2Q5MjkwNGQ3ZjI0In0sImlhdCI6MTY1NDQ5OTU5OH0.6bKRNgML54AHqpnzt2JBmLSrStDqPyGkQh8FlqMAujE'
             }
         });
-
+        let json = await response.json();
         fetchAllNotes();
+        return json;
     }
 
     //edit note function
     const editNote = async (id, title, description, tag) => {
         //api call
-        await fetch(`${host}/api/notes/updatenote/${id}`, {
+        const res = await fetch(`${host}/api/notes/updatenote/${id}`, {
             method: 'PUT',
             headers: {
                 'content-type': 'application/json',
@@ -64,6 +59,7 @@ const NoteState = (props) => {
             },
             body: JSON.stringify({ title, description, tag })
         });
+        let json = await res.json();
 
         for (let i = 0; i < notes.length; i++) {
             if (notes[i]._id === id) {
@@ -72,6 +68,7 @@ const NoteState = (props) => {
                 notes[i].tag = tag;
             }
         }
+        return json;
     }
 
     return (

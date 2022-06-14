@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import NoteContext from '../context/notes/NoteContext';
 import AddNote from './AddNote';
 import NoteItem from './NoteItem';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Notes = () => {
     const context = useContext(NoteContext);
@@ -27,8 +29,12 @@ const Notes = () => {
         setNote({ ...note, [e.target.name]: e.target.value })
     }
 
-    const clickHandler = (e) => {
-        editNote(note.id, note.title, note.description, note.tag);
+    const clickHandler = async (e) => {
+        let res = await editNote(note.id, note.title, note.description, note.tag);
+        //use the flag success
+        if (res.success) {
+            toast.success("Note Updated", { autoClose: 1500 });
+        }
         refCloseModal.current.click();
     }
 
@@ -45,9 +51,6 @@ const Notes = () => {
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title" id="exampleModalLabel">Edit Note</h5>
-                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
                         </div>
                         <div className="modal-body">
                             {/* same form as add note in the modal body */}
@@ -78,7 +81,7 @@ const Notes = () => {
 
             <div className='container my-5'>
                 <h2>Your Notes</h2>
-                <div className="all-notes row my-3">
+                <div className="all-notes row my-1">
                     <div className="container my-3 mx-3">
                         {notes.length === 0 && "no notes do display, please add some"}
                     </div>

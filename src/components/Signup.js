@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const host = "http://localhost:5000";
 
 const Signup = () => {
@@ -23,6 +25,7 @@ const Signup = () => {
         });
         let json = await response.json();
         if (json.success) {
+            toast.success("Account Created", {autoClose: 1500});
             navigate('/', { replace: true });
         }
         else {
@@ -31,7 +34,7 @@ const Signup = () => {
     }
 
     return (
-        <div>
+        <div className='container my-5'>
             <form onSubmit={handleSignupBtn}>
                 <div className="mb-3">
                     <label htmlFor="name" className="form-label">Full name</label>

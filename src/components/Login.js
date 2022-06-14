@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const host = "http://localhost:5000";
 
 const Login = () => {
@@ -21,9 +23,12 @@ const Login = () => {
         if (json.success) {
             //if login success then save the auth token and redirect
             localStorage.setItem('authtoken', json.authtoken);
+            toast.success("Login Success", {autoClose: 1500});
             navigate('/', { replace: true });     //navigate to '/', replace true replaces the page with specified one, it means we can not go back to login page
         }
-        else alert("invlid cre")
+        else{
+            toast.error("Invalid User", {autoClose: 1500});
+        }
     }
 
     const onChange = (e) => {
@@ -31,16 +36,16 @@ const Login = () => {
     }
 
     return (
-        <div>
+        <div className='container my-5 d-flex justify-content-center'>
             {/* login form */}
             <form onSubmit={handleLoginBtn}>
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">Email address</label>
-                    <input type="email" name="email" className="form-control" id="email" onChange={onChange} value={credentials.email} aria-describedby="emailHelp" />
+                    <input type="email" name="email" className="form-control col-6" id="email" onChange={onChange} value={credentials.email} aria-describedby="emailHelp"/>
                 </div>
                 <div className="mb-3">
                     <label htmlFor="password" className="form-label">Password</label>
-                    <input type="password" name="password" className="form-control" id="password" onChange={onChange} value={credentials.password} />
+                    <input type="password" name="password" className="form-control" id="password" onChange={onChange} value={credentials.password}/>
                 </div>
                 <button type="submit" className="btn btn-primary">Login</button>
             </form>

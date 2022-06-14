@@ -1,5 +1,7 @@
 import React, { useContext, useState } from 'react';
 import NoteContext from '../context/notes/NoteContext';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddNote = () => {
     const context = useContext(NoteContext);
@@ -10,16 +12,19 @@ const AddNote = () => {
         setNote({ ...note, [e.target.name]: e.target.value })
     }
 
-    const clickHandler = (e) => {
+    const clickHandler = async (e) => {
         e.preventDefault();
-        addNote(note.title, note.description, note.tag);
+        const res = await addNote(note.title, note.description, note.tag);
+        if(res.success){
+            toast.success("Note added", {autoClose: 1500});
+        }
         setNote({title: "", description: "", tag: ""});
     }
 
     return (
         <div>
-            <h2>Add a Note</h2>
-            <form className='my-3 add-note-form'>
+            <h2>Add New Note</h2>
+            <form className='my-5 add-note-form'>
                 <div className="row">
                     <div className="mb-3 col">
                         <label htmlFor="title" className="form-label">Title</label>
