@@ -4,15 +4,23 @@ import AddNote from './AddNote';
 import NoteItem from './NoteItem';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 const Notes = () => {
     const context = useContext(NoteContext);
+    const navigate = useNavigate();
     const { notes, fetchAllNotes, editNote } = context;
     const [note, setNote] = useState({ id: "", title: "", description: "", tag: "" });
 
     useEffect(() => {
-        return () => {
-            fetchAllNotes();
+        //if user not logged in then do not render the notes and redirect to login page
+        if (localStorage.getItem('authtoken')) {
+            return () => {
+                fetchAllNotes();
+            }
+        }
+        else{
+            navigate('/login');
         }
     })
 
@@ -83,7 +91,7 @@ const Notes = () => {
                 <h2>Your Notes</h2>
                 <div className="all-notes row my-1">
                     <div className="container my-3 mx-3">
-                        {notes.length === 0 && "no notes do display, please add some"}
+                        {notes.length === 0 && "no notes to display, please add some"}
                     </div>
                     {
                         notes.map((note) => {

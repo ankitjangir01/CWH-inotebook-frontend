@@ -17,12 +17,12 @@ const Login = () => {
             headers: {
                 'content-type': 'application/json',
             },
-            body: JSON.stringify({ email: credentials.email, password: credentials.password })
+            body: await JSON.stringify({ email: credentials.email, password: credentials.password })
         });
         let json = await response.json();
         if (json.success) {
             //if login success then save the auth token and redirect
-            localStorage.setItem('authtoken', json.authtoken);
+            localStorage.setItem('authtoken', json.authToken);
             toast.success("Login Success", {autoClose: 1500});
             navigate('/', { replace: true });     //navigate to '/', replace true replaces the page with specified one, it means we can not go back to login page
         }

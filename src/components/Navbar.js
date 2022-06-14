@@ -1,9 +1,53 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+const host = 'http://localhost:5000';
 
 const Navbar = () => {
-
   const loc = useLocation();
+  const [userDetails, setUserDetails] = useState({ name: "", email: "", since: "" });
+
+  const getUserDetails = async () => {
+    const res = await fetch(`${host}/api/auth/getuser`, {
+      method: 'POST',
+      headers: {
+        'auth-token': localStorage.getItem('authtoken'),
+      }
+    });
+    let json = await res.json();
+    let t = new Date(json.user.date);
+    setUserDetails({
+      name: json.user.name,
+      email: json.user.email,
+      since: t.toLocaleDateString()
+    })
+  }
+
+  const getAuthButtons = () => {
+    //if user is logged in, show profile else show login and signup buttons
+    if (localStorage.getItem('authtoken')) {
+      return (
+        <div className="btn-group">
+          <button type="button" onClick={getUserDetails} className="btn btn-secondary dropdown-toggle btn-sm" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+            My Profile
+          </button>
+          <ul className="dropdown-menu dropdown-menu-lg-end">
+            <li className="p-3 text-nowrap"><strong>Name: {userDetails.name}</strong></li>
+            <li className="p-3 text-nowrap">email: {userDetails.email}</li>
+            <li className="p-3 text-nowrap">member since: {userDetails.since}</li>
+            <Link to='/login' className='dropdown-item'>Logout</Link>
+          </ul>
+        </div>
+      )
+    }
+    else {
+      return (
+        <form className="d-flex">
+          <Link type="button" to='/login' className="btn btn-outline-primary mx-1 btn-sm">Login</Link>
+          <Link type="button" to='/signup' className="btn btn-outline-primary mx-1 btn-sm">Sign Up</Link>
+        </form>
+      );
+    }
+  }
 
   return (
     <>
@@ -33,10 +77,7 @@ const Navbar = () => {
                 </ul>
               </li>
             </ul>
-            <form className="d-flex">
-              <Link type="button" to='/login' className="btn btn-outline-primary mx-1 btn-sm">Login</Link>
-              <Link type="button" to='/signup' className="btn btn-outline-primary mx-1 btn-sm">Sign Up</Link>
-            </form>
+            {getAuthButtons()}
           </div>
         </div>
       </nav>
