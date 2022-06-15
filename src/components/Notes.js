@@ -15,6 +15,7 @@ const Notes = () => {
     useEffect(() => {
         //if user not logged in then do not render the notes and redirect to login page
         if (localStorage.getItem('authtoken')) {
+            console.log('notes fetched----------')
             return () => {
                 fetchAllNotes();
             }
@@ -22,7 +23,7 @@ const Notes = () => {
         else{
             navigate('/login');
         }
-    })
+    }, [])  
 
     const ref = useRef(null);
     const refCloseModal = useRef(null);
@@ -94,7 +95,7 @@ const Notes = () => {
                         {notes.length === 0 && "no notes to display, please add some"}
                     </div>
                     {
-                        notes.map((note) => {
+                        Array.from(notes).map((note) => {
                             return <NoteItem key={note._id} updateNote={updateNote} note={note} />
                         })
                     }

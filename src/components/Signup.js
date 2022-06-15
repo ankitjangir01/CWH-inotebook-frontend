@@ -34,8 +34,9 @@ const Signup = () => {
     }
 
     return (
-        <div className='container my-5'>
-            <form onSubmit={handleSignupBtn}>
+        <div className='container my-5 w-50 mx-auto'>
+            <h2>Create an account on iNotebook</h2>
+            <form onSubmit={handleSignupBtn} className='my-5'>
                 <div className="mb-3">
                     <label htmlFor="name" className="form-label">Full name</label>
                     <input type="text" name="name" className="form-control" id="name" onChange={onChange} value={credentials.name} minLength={3} required />

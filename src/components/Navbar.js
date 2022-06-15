@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 const host = 'http://localhost:5000';
 
 const Navbar = () => {
   const loc = useLocation();
   const [userDetails, setUserDetails] = useState({ name: "", email: "", since: "" });
+  const navigate = useNavigate();
 
   const getUserDetails = async () => {
     const res = await fetch(`${host}/api/auth/getuser`, {
@@ -22,6 +23,14 @@ const Navbar = () => {
     })
   }
 
+  const logOut = () => {
+    let res = window.confirm("You are about to logout");
+    if(res){
+      navigate('/login', {replace: true});
+      localStorage.removeItem('authtoken');
+    }
+  }
+
   const getAuthButtons = () => {
     //if user is logged in, show profile else show login and signup buttons
     if (localStorage.getItem('authtoken')) {
@@ -31,10 +40,10 @@ const Navbar = () => {
             My Profile
           </button>
           <ul className="dropdown-menu dropdown-menu-lg-end">
-            <li className="p-3 text-nowrap"><strong>Name: {userDetails.name}</strong></li>
-            <li className="p-3 text-nowrap">email: {userDetails.email}</li>
-            <li className="p-3 text-nowrap">member since: {userDetails.since}</li>
-            <Link to='/login' className='dropdown-item'>Logout</Link>
+            <li className="p-2 mx-2 text-nowrap"><strong>Name: {userDetails.name}</strong></li>
+            <li className="p-2 mx-2 text-nowrap">Email: {userDetails.email}</li>
+            <li className="p-2 mx-2 text-nowrap">Member since: {userDetails.since}</li>
+            <li className="dropdown-item" onClick={logOut}>Logout</li>
           </ul>
         </div>
       )
@@ -51,7 +60,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark navbar-sticky">
         <div className="container-fluid">
           <Link className="navbar-brand" to="/">iNotebook</Link>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
